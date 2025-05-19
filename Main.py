@@ -1,6 +1,25 @@
 import streamlit as st
 import pandas as pd
 
+# Sample data
+data = {
+    "Name": ["Alice", "Bob", "Charlie"],
+    "Score": [85, 42, 73]
+}
+df = pd.DataFrame(data)
+
+# Apply color styling based on value
+def color_score(val):
+    color = 'green' if val >= 70 else 'red'
+    return f'color: {color}'
+
+# Apply style
+styled_df = df.style.applymap(color_score, subset=['Score'])
+
+# Display in Streamlit
+st.write("### Student Scores")
+st.dataframe(styled_df, use_container_width=True)
+
 # --- Initialize session state ---
 if "parents" not in st.session_state:
     st.session_state.parents = []
