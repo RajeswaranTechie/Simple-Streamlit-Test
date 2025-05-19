@@ -20,6 +20,38 @@ styled_df = df.style.applymap(color_score, subset=['Score'])
 st.write("### Student Scores")
 st.dataframe(styled_df, use_container_width=True)
 
+
+# Sample data
+data = {
+    "Name": ["Alice", "Bob", "Charlie"],
+    "Score": [85, 42, 73]
+}
+df = pd.DataFrame(data)
+
+# Convert Score to colored HTML strings
+def format_row(row):
+    color = 'green' if row['Score'] >= 70 else 'red'
+    return f"<span style='color:{color};'>{row['Score']}</span>"
+
+# Add a new column for display only
+df['Colored Score'] = df.apply(format_row, axis=1)
+
+# Editable version (Score column only)
+edited_df = st.data_editor(
+    df[['Name', 'Score']],  # only editable columns
+    num_rows="dynamic",
+    use_container_width=True
+)
+
+# Update colored column based on edits
+edited_df['Colored Score'] = edited_df.apply(format_row, axis=1)
+
+# Show updated styled result
+st.markdown("### Colored Result Preview")
+st.write(edited_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+
+
+
 # --- Initialize session state ---
 if "parents" not in st.session_state:
     st.session_state.parents = []
